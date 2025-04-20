@@ -27,3 +27,20 @@ if (document.readyState === "loading") {
 } else {
   runBundleFilter();
 }
+// Set up MutationObserver to detect changes in the product list
+const observer = new MutationObserver((mutationsList, observer) => {
+  for (let mutation of mutationsList) {
+    if (mutation.addedNodes.length > 0) {
+      console.log("DOM changed, running filter again...");
+      runBundleFilter();
+      break;
+    }
+  }
+});
+
+// Start observing the body or a specific container
+const targetNode = document.body; // You can target a more specific container if needed
+observer.observe(targetNode, {
+  childList: true,
+  subtree: true
+});
