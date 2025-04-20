@@ -22,3 +22,6 @@ This Browser extension hides products labeled as **"Bundle Deals"** on AliExpres
 Select the folder where you cloned/downloaded the extension.
 5.	**The extension is now active! 🎉**
 Visit any AliExpress page and products labeled with “Bundle deals” will be removed automatically.
+
+
+☕ [Buy me a coffee](https://paypal.me/vrbko?country.x=SI&locale.x=en_US)  — totally optional, but always appreciated!
