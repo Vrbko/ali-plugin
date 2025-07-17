@@ -1,23 +1,46 @@
-console.log("Plugin script is running1!");
+/// TREBA JE NAjTI "kc_kq", in "hm_bu", vsaki update
+/*
+  <div data-tticheck="true" class="hm_bu search-item-card-wrapper-gallery">
+    <div class="kc_kq">
+      <div class="kc_ke card-out-wrapper" style=""></div>
+
+
+      Torej wrraper je hm_bu, klass pa je pod njim, najboljse bi blo to nardit dinamično 
+*/
+
+const debug = false; // Set to false to disable debug logging
+
+function log(...args) {
+  if (debug) console.log(...args);
+}
+
+function warn(...args) {
+  if (debug) console.warn(...args);
+}
+
+log("Plugin script is running1!");
 
 function runBundleFilter() {
-  console.log('Plugin script is running2');  // Confirm logic is running
+  log('Plugin script is running2, searching for kc_kq');  // Confirm logic is running
 
-  const cards = document.querySelectorAll('.l5_ae');
-  console.log(`Found ${cards.length} cards.`);
+  const cards = document.querySelectorAll('.kc_kq');
+  log(`Found ${cards.length} cards.`);
 
   cards.forEach(card => {
+    log("Iterating search for card ?");
     if (card.innerText.includes("Bundle deals")) {
-        // Find the grandparent with specific classes
-        const wrapper = card.closest('.hm_bl.search-item-card-wrapper-gallery');
-        
-        if (wrapper) {
-          console.log("Removing wrapper:", wrapper);
-          wrapper.remove();
-        } else {
-          console.warn("Wrapper not found for card:", card);
-        }
+      log("Found Bundle deals in a card");
+
+      // Find the grandparent with specific classes
+      const wrapper = card.closest('.hm_bu.search-item-card-wrapper-gallery');
+
+      if (wrapper) {
+        log("Removing wrapper:", wrapper);
+        wrapper.remove();
+      } else {
+        warn("Wrapper not found for card:", card);
       }
+    }
   });
 }
 
@@ -27,13 +50,18 @@ if (document.readyState === "loading") {
 } else {
   runBundleFilter();
 }
+
 // Set up MutationObserver to detect changes in the product list
-const observer = new MutationObserver((mutationsList, observer) => {
+const observer = new MutationObserver((mutationsList) => {
   for (let mutation of mutationsList) {
-    if (mutation.addedNodes.length > 0) {
-      console.log("DOM changed, running filter again...");
-      runBundleFilter();
-      break;
+    for (let node of mutation.addedNodes) {
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+      if (node.matches?.('.kc_kq') || node.querySelector?.('.kc_kq')) {
+        log("Relevant change detected, running filter...");
+        runBundleFilter();
+        return; // Only need to run once per relevant batch
+      }
     }
   }
 });
